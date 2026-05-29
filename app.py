@@ -1,37 +1,37 @@
 import streamlit as st
-import random
+from streamlit_javascript import st_javascript
 
 # 제목
-st.title("✌️ 가위바위보 게임")
+st.title("🏃 점프 게임")
 
-# 선택 목록
-choices = ["가위", "바위", "보"]
+# 점프 상태 저장
+if "jump" not in st.session_state:
+    st.session_state.jump = False
 
-# 사용자 선택
-user = st.radio(
-    "하나를 선택하세요",
-    choices
-)
+# 스페이스바 감지
+key = st_javascript("""
+document.addEventListener('keydown', function(e) {
+    if (e.code === 'Space') {
+        window.parent.postMessage("jump", "*");
+    }
+});
+""")
 
-# 게임 버튼
-if st.button("게임 시작"):
+# 점프 처리
+if key == "jump":
+    st.session_state.jump = True
 
-    # 컴퓨터 선택
-    computer = random.choice(choices)
+# 화면 출력
+if st.session_state.jump:
+    st.markdown(
+        "<h1 style='font-size:100px;'>🦘</h1>",
+        unsafe_allow_html=True
+    )
+    st.write("점프 성공!")
+    st.session_state.jump = False
 
-    st.write(f"🧑 당신: {user}")
-    st.write(f"💻 컴퓨터: {computer}")
-
-    # 승패 판정
-    if user == computer:
-        st.success("🤝 비겼습니다!")
-
-    elif (
-        (user == "가위" and computer == "보") or
-        (user == "바위" and computer == "가위") or
-        (user == "보" and computer == "바위")
-    ):
-        st.success("🎉 당신이 이겼습니다!")
-
-    else:
-        st.error("😢 컴퓨터가 이겼습니다!")
+else:
+    st.markdown(
+        "<h1 style='font-size:100px;'>🐤</h1>",
+        unsafe_allow_html=True
+    )
