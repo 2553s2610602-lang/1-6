@@ -1,37 +1,31 @@
 import streamlit as st
+import random
 
 # 제목
-st.title("💌 연애 코칭 앱")
+st.title("🎮 숫자 맞추기 게임")
 
-# 설명
-st.write("현재 고민을 선택하면 간단한 연애 조언을 제공합니다.")
+# 랜덤 숫자 저장
+if "number" not in st.session_state:
+    st.session_state.number = random.randint(1, 10)
 
-# 고민 선택
-problem = st.selectbox(
-    "어떤 고민이 있나요?",
-    [
-        "썸",
-        "연락 문제",
-        "고백",
-        "이별",
-        "재회",
-    ]
+# 입력창
+guess = st.number_input(
+    "1부터 10 사이 숫자를 맞춰보세요",
+    min_value=1,
+    max_value=10,
+    step=1
 )
 
 # 버튼
-if st.button("조언 받기"):
+if st.button("확인"):
 
-    if problem == "썸":
-        st.success("상대에게 부담 주지 말고 자연스럽게 대화를 이어가세요.")
+    if guess == st.session_state.number:
+        st.success("🎉 정답입니다!")
 
-    elif problem == "연락 문제":
-        st.success("답장이 늦다고 조급해하지 말고 여유를 가지세요.")
+    else:
+        st.error("❌ 틀렸습니다!")
 
-    elif problem == "고백":
-        st.success("완벽한 타이밍보다 솔직한 마음이 더 중요합니다.")
-
-    elif problem == "이별":
-        st.success("억지로 잊으려 하지 말고 충분히 감정을 정리하세요.")
-
-    elif problem == "재회":
-        st.success("다시 만나기 전에 왜 헤어졌는지 먼저 돌아보세요.")
+# 다시 시작 버튼
+if st.button("새 게임"):
+    st.session_state.number = random.randint(1, 10)
+    st.success("새 숫자가 생성되었습니다!")
